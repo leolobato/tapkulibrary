@@ -31,6 +31,8 @@
 
 #import "UIViewController+TKCategory.h"
 
+#import "TKHTTPRequest.h"
+
 @implementation UIViewController (TKCategory)
 
 
@@ -111,7 +113,15 @@
 		NSString *background = [dict objectForKey:@"backgroundProcessor"];
 		NSString *eSelector = [dict objectForKey:@"errroSelector"];
 		
-		id object = [NSJSONSerialization JSONObjectWithData:data options:options error:&error];
+        
+        id object = nil;
+        Class jsonSerializationClass = NSClassFromString(@"NSJSONSerialization");
+        if (!jsonSerializationClass) {
+            NSDictionary *userInfo = nil;
+            error = [NSError errorWithDomain:@"TKErrorDomain" code:500 userInfo:userInfo];
+        } else {
+            object = [jsonSerializationClass JSONObjectWithData:data options:options error:&error];
+        }
 		
 		
 		
