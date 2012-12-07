@@ -1,6 +1,7 @@
 //
-//  UIImageAdditions.h
-//  Created by Devin Ross on 7/25/09.
+//  TKShapeView.h
+//  Created by Devin Ross on 6/24/12.
+//
 //
 /*
  
@@ -27,21 +28,15 @@
  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  OTHER DEALINGS IN THE SOFTWARE.
  
- */
-
+*/
 
 #import <UIKit/UIKit.h>
+#import <QuartzCore/QuartzCore.h>
 
-/** Additional functionality for `UIImage`.  */
-@interface UIImage (TKCategory)
+/** This class implements `UIView` backed by a `CAShapeLayer`. */
+@interface TKShapeView : UIView
 
-+ (UIImage*) imageNamedTK:(NSString*)path;
-
-
-- (UIImage *) imageCroppedToRect:(CGRect)rect;
-- (UIImage *) squareImage;
-
-
+/** The path defining the shape of the view. */
+@property CGPathRef path;
 
 @end
-

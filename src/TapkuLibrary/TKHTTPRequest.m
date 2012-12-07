@@ -350,7 +350,7 @@ static inline NSString * TKKeyPathFromOperationState(TKOperationState state) {
 	self.responseHeaders = [httpResponse allHeaderFields];
 	
 	
-	if(self.statusCode == 200) {
+	if(self.statusCode > 199 && self.statusCode < 300)  {
 		_totalExpectedImageSize = (double)response.expectedContentLength;
 		NSUInteger contentSize = [httpResponse expectedContentLength] > 0 ? [httpResponse expectedContentLength] : 0;
 		self.data = [[NSMutableData alloc] initWithCapacity:contentSize];
@@ -490,12 +490,11 @@ static inline NSString * TKKeyPathFromOperationState(TKOperationState state) {
 
 
 + (void) hideNetworkActivityIndicatorIfNeeeded{
-	
-	if (runningRequestCount == 0) {
 #if TARGET_OS_IPHONE
+	if (runningRequestCount == 0) 
 		[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];	
 #endif
-	}
+
 }
 
 + (void) increaseNetworkMain{
@@ -512,6 +511,7 @@ static inline NSString * TKKeyPathFromOperationState(TKOperationState state) {
 + (void) decreaseNetworkMain{
 	runningRequestCount--;
 #if TARGET_OS_IPHONE
+	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideNetworkActivityIndicatorIfNeeeded) object:nil];
 	[self performSelector:@selector(hideNetworkActivityIndicatorIfNeeeded) withObject:nil afterDelay:0.5];
 #endif
 

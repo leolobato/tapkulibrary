@@ -35,7 +35,6 @@
 #define AnimationIncrement 0.02
 
 @implementation TKProgressCircleView
-@synthesize  progress=_progress,twirlMode=_twirlMode;
 
 - (id) init{
 	self = [self initWithFrame:CGRectZero];	
@@ -104,8 +103,11 @@
 	_displayProgress += AnimationIncrement;
 	[self setNeedsDisplay];
 
-	if(_displayProgress < _progress)
+	if(_displayProgress < _progress){
+		
+		[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateProgress) object:nil];
 		[self performSelector:@selector(updateProgress) withObject:nil afterDelay:AnimationTimer];
+	}
 
 }
 - (void) updateTwirl{
@@ -114,6 +116,7 @@
 	_displayProgress += AnimationIncrement;
 	[self setNeedsDisplay];
 	
+	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateTwirl) object:nil];
 	[self performSelector:@selector(updateTwirl) withObject:nil afterDelay:AnimationTimer];
 	
 }

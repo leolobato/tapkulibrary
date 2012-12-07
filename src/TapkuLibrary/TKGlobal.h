@@ -33,6 +33,10 @@
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
 
+
+#define TKLog(s, ...) NSLog( @"[%@ %@] %@",NSStringFromClass([self class]), NSStringFromSelector(_cmd),[NSString stringWithFormat:(s), ##__VA_ARGS__] )
+
+
 #define TKBUNDLE(_URL) [TKGlobal fullBundlePath:_URL]
 
 #define CAScale(_X,_Y,_Z) CATransform3DMakeScale(_X,_Y,_Z)
@@ -44,6 +48,27 @@
 #define CGRotate(_ANGLE) CGAffineTransformMakeRotation(_ANGLE)
 #define CGTranslate(_X,_Y) CGAffineTransformMakeTranslation(_X,_Y)
 #define CGConcat(_ONE,_TWO) CGAffineTransformConcat(_ONE,_TWO)
+
+
+
+
+
+FOUNDATION_STATIC_INLINE CGRect CGRectMakeWithSize(CGFloat x, CGFloat y, CGSize size);
+FOUNDATION_STATIC_INLINE CGRect CGRectMakeWithSize(CGFloat x, CGFloat y, CGSize size){
+	CGRect r; r.origin.x = x; r.origin.y = y; r.size = size; return r;
+}
+
+FOUNDATION_STATIC_INLINE CGRect CGRectMakeWithPoint(CGPoint origin, CGFloat width, CGFloat height);
+FOUNDATION_STATIC_INLINE CGRect CGRectMakeWithPoint(CGPoint origin, CGFloat width, CGFloat height){
+	CGRect r; r.origin = origin; r.size.width = width; r.size.height = height; return r;
+}
+
+FOUNDATION_STATIC_INLINE CGRect CGRectCompose(CGPoint origin, CGSize size);
+FOUNDATION_STATIC_INLINE CGRect CGRectCompose(CGPoint origin, CGSize size){
+	CGRect r; r.origin = origin; r.size = size; return r;
+}
+
+
 
 @interface TKGlobal : NSObject 
 

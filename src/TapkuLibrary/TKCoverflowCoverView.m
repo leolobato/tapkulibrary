@@ -33,71 +33,84 @@
 #import "UIImage+TKCategory.h"
 #import "TKGlobal.h"
 
-
-
-
 @implementation TKCoverflowCoverView
-@synthesize baseline,gradientLayer;
 
-
-- (id) initWithFrame:(CGRect)frame {
-    if(!(self=[super initWithFrame:frame])) return nil;
-    
-    self.opaque = NO;
+- (id) initWithFrame:(CGRect)frame showReflection:(BOOL)reflection{
+	if(!(self=[super initWithFrame:frame])) return nil;
+	
+	
+	self.opaque = NO;
     self.backgroundColor = [UIColor clearColor];
     self.layer.anchorPoint = CGPointMake(0.5, 0.5);
+	
+	self.imageView = [[UIImageView alloc] initWithFrame:self.bounds];
+    [self addSubview:self.imageView];
+	
+	if(reflection){
+		
+		CGRect reflectRect = CGRectMakeWithSize(0, self.frame.size.height, self.bounds.size);
+		
+		self.reflected =  [[UIImageView alloc] initWithFrame:reflectRect];
+		self.reflected.transform = CGAffineTransformScale(self.reflected.transform, 1, -1);
+		[self addSubview:self.reflected];
+		
+		self.gradientLayer = [CAGradientLayer layer];
+		self.gradientLayer.colors = [NSArray arrayWithObjects:(id)[UIColor colorWithWhite:0 alpha:0.5].CGColor,(id)[UIColor colorWithWhite:0 alpha:1].CGColor,nil];
+		self.gradientLayer.startPoint = CGPointMake(0,0);
+		self.gradientLayer.endPoint = CGPointMake(0,0.3);
+		self.gradientLayer.frame = reflectRect;
+		[self.layer addSublayer:self.gradientLayer];
+	}
     
-    imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.width)];
-    [self addSubview:imageView];
-    
-    reflected =  [[UIImageView alloc] initWithFrame:CGRectMake(0, self.frame.size.width, self.frame.size.width, self.frame.size.width)];
-    reflected.transform = CGAffineTransformScale(reflected.transform, 1, -1);
-    [self addSubview:reflected];
-
-    gradientLayer = [CAGradientLayer layer];
-    gradientLayer.colors = [NSArray arrayWithObjects:(id)[UIColor colorWithWhite:0 alpha:0.5].CGColor,(id)[UIColor colorWithWhite:0 alpha:1].CGColor,nil];
-    gradientLayer.startPoint = CGPointMake(0,0);
-    gradientLayer.endPoint = CGPointMake(0,0.3);
-    gradientLayer.frame = CGRectMake(0, self.frame.size.width, self.frame.size.width, self.frame.size.width);
-    [self.layer addSublayer:gradientLayer];
-    
-    
-    
-    return self;
+	return self;
 }
-
+- (id) initWithFrame:(CGRect)frame {
+	return [self initWithFrame:frame showReflection:YES];
+}
 
 - (void) setImage:(UIImage *)img{
 	
-	UIImage *image = img;
+	if(img==nil){
+		[CATransaction begin];
+		[CATransaction setAnimationDuration:0.0f];
+		self.imageView.frame = self.bounds;
+		
+		if(self.gradientLayer){
+			self.reflected.image = nil;
+			self.gradientLayer.frame = self.reflected.frame = CGRectMakeWithSize(0,self.frame.size.height,self.bounds.size);
+		}
+		self.imageView.image = nil;
+		[CATransaction commit];
+		return;
+	}
 	
-	float w = image.size.width;
-	float h = image.size.height;
-	float factor = self.bounds.size.width / (h>w?h:w);
+	
+	[CATransaction begin];
+	[CATransaction setAnimationDuration:0.0f];
+	
+	UIImage *image = img;
+	CGFloat w = image.size.width;
+	CGFloat h = image.size.height;
+	CGFloat factor = self.bounds.size.width / (h>w?h:w);
 	h = factor * h;
 	w = factor * w;
-	float y = baseline - h > 0 ? baseline - h : 0;
+	CGFloat y = _baseline - h > 0 ? _baseline - h : 0;
 	
-	imageView.frame = CGRectMake(0, y, w, h);
-	imageView.image = image;
+	self.imageView.frame = CGRectMake(0, y, w, h);
+	self.imageView.image = image;
+	
+	if(self.gradientLayer){
+		self.reflected.frame = self.gradientLayer.frame = CGRectMake(0, y + h, w, h);
+		self.reflected.image = image;
+	}
+	
+	[CATransaction commit];
 	
 	
-	gradientLayer.frame = CGRectMake(0, y + h, w, h);
-	
-	reflected.frame = CGRectMake(0, y + h, w, h);
-	reflected.image = image;
 }
 - (UIImage*) image{
-	return imageView.image;
+	return self.imageView.image;
 }
-- (void) setBaseline:(float)f{
-	baseline = f;
-	[self setNeedsDisplay];
-}
-
-
-
-
 
 
 @end

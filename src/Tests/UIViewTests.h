@@ -1,10 +1,10 @@
 //
-//  UIImageAdditions.h
-//  Created by Devin Ross on 7/25/09.
+//  UIViewTests.h
+//  Created by Devin on 7/18/12.
 //
 /*
  
- tapku.com || http://github.com/devinross/tapkulibrary
+ tapku.com || https://github.com/devinross/tapkulibrary
  
  Permission is hereby granted, free of charge, to any person
  obtaining a copy of this software and associated documentation
@@ -29,19 +29,12 @@
  
  */
 
-
+#import <SenTestingKit/SenTestingKit.h>
+#import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import <QuartzCore/QuartzCore.h>
+#import "UIView+TKCategory.h"
 
-/** Additional functionality for `UIImage`.  */
-@interface UIImage (TKCategory)
-
-+ (UIImage*) imageNamedTK:(NSString*)path;
-
-
-- (UIImage *) imageCroppedToRect:(CGRect)rect;
-- (UIImage *) squareImage;
-
-
+@interface UIViewTests : SenTestCase
 
 @end
-

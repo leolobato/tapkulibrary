@@ -44,22 +44,25 @@
 	NSMutableArray *views;		// only covers view (no nulls)
 	NSMutableArray *yard;	   // covers ready for reuse (ie. graveyard)
 	
-	float origin;
 	BOOL movingRight;
 
 	UIView *currentTouch;
 	NSRange deck;
 	
 	
-	int margin, coverBuffer, currentIndex, numberOfCovers;
-	CGSize coverSize,currentSize;
-	float coverSpacing,coverAngle,spaceFromCurrent;
+	NSInteger margin, coverBuffer, currentIndex;
+	CGFloat spaceFromCurrent;
 	CATransform3D leftTransform, rightTransform;
+	CGSize boundSize;
 	
 	// SPEED
-	int pos;
-	long velocity;
+	NSInteger pos;
+	CGFloat velocity;
 	
+	
+	BOOL isDragging;
+	BOOL gliding;
+	NSInteger movingIndex;
 }
 
 
@@ -81,6 +84,10 @@
 /** The angle which covers will be display at when they are not on the center. */
 @property (nonatomic, assign) float coverAngle;
 
+/** The amount of space the center cover is infront of the rest of the other covers. Default is 300. */
+@property (nonatomic, assign) float spaceInFront;
+
+
 
 /** Returns an usued coverflow view. If there are no reusable views, it will return nil. */
 - (TKCoverflowCoverView*) dequeueReusableCoverView; // like a tableview
@@ -91,7 +98,15 @@
  */
 - (TKCoverflowCoverView*) coverAtIndex:(int)index; // returns nil if cover is outside active range
 
-- (int) indexOfFrontCoverView; // deprecated
+/** Returns the visible covers on screen.
+ @return An array of visible covers.
+ */
+- (NSArray*) visibleCovers;
+
+/** Returns the range covers on screen.
+ @return A range of visible covers.
+ */
+- (NSRange) visibleRange;
 
 /** Sets the foremost cover.
  @param index The index of the cover that will become the foremost cover.
@@ -115,11 +130,12 @@
  */
 - (void) coverflowView:(TKCoverflowView*)coverflowView coverAtIndexWasBroughtToFront:(int)index;
 @optional
-/** Tells the delegate that a specified cover was double tapped.
+/** Tells the delegate that a specified cover was tapped.
  @param coverflowView The coverflow view.
  @param index The index of the double tapped cover.
+ @param tapCount The number of times the front cover was tapped.
  */
-- (void) coverflowView:(TKCoverflowView*)coverflowView coverAtIndexWasDoubleTapped:(int)index;
+- (void) coverflowView:(TKCoverflowView*)coverflowView coverAtIndexWasTappedInFront:(int)index tapCount:(NSInteger)tapCount;
 @end
 
 /** The data source of a `TKCoverflowView` object must adopt the `TKCoverflowViewDataSource` protocol. */ 

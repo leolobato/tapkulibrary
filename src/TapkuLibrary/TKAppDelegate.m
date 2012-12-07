@@ -33,7 +33,6 @@
 #import "TKWindow.h"
 
 @implementation TKAppDelegate
-@synthesize window=_window;
 
 
 - (BOOL) application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
@@ -52,7 +51,7 @@
 	[self applicationDidStartup:application];
 }
 - (void) applicationDidStartup:(UIApplication *)application{
-	// Default Implmentaion Does Nothing
+	// Default Implementaion Does Nothing
 }
 
 

@@ -35,13 +35,9 @@
 /** 
  `TKCoverflowCoverView` objects are the main views for displaying covers in `TKCoverflowView`. 
  */
-@interface TKCoverflowCoverView : UIView {
-	float baseline;
-	
-	UIImageView *imageView;
-	UIImageView *reflected;
-	CAGradientLayer *gradientLayer;
-}
+@interface TKCoverflowCoverView : UIView 
+
+- (id) initWithFrame:(CGRect)frame showReflection:(BOOL)reflection;
 
 /** The coverflow image. */
 @property (strong,nonatomic) UIImage *image;
@@ -50,6 +46,13 @@
 @property (strong,nonatomic) CAGradientLayer *gradientLayer;
 
 /** The height of the image. This property will help coverflow adjust views to display images with different heights. */
-@property (assign,nonatomic) float baseline; // set this property for displaying images w/ different heights
+@property (assign,nonatomic) CGFloat baseline; // set this property for displaying images w/ different heights
+
+
+
+@property (nonatomic,strong) UIImageView *imageView;
+
+@property (nonatomic,strong) UIImageView *reflected;
+
 
 @end
